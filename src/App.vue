@@ -148,6 +148,7 @@ onMounted(loadLogs)
               <th>IP</th>
               <th>Result</th>
               <th>User-Agent</th>
+              <th>Metadata</th>
               <th>Path</th>
             </tr>
           </thead>
@@ -163,6 +164,7 @@ onMounted(loadLogs)
                 <span v-else>—</span>
               </td>
               <td class="ua">{{ log.user_agent || '—' }}</td>
+              <td class="md">{{ log.metadata || '{}' }}</td>
               <td class="path">{{ log.path || '—' }}</td>
             </tr>
             <tr v-if="!filteredLogs.length">
