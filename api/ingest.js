@@ -94,6 +94,7 @@ export default async function handler(req, res) {
         ? req.body
         : {}
 
+    console.log('ingest body', body)
     const event =
       typeof body.event === 'string'
         ? body.event.slice(0, 100)
