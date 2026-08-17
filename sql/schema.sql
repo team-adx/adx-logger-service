@@ -1,5 +1,4 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-CREATE EXTENSION IF NOT EXISTS pg_cron;
 
 CREATE TABLE IF NOT EXISTS logger_projects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -46,17 +45,3 @@ CREATE INDEX IF NOT EXISTS logger_events_created_at_idx ON logger_events (create
 CREATE INDEX IF NOT EXISTS logger_events_project_created_idx ON logger_events (project_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS logger_events_ip_idx ON logger_events (ip);
 CREATE INDEX IF NOT EXISTS logger_sessions_expires_idx ON logger_sessions (expires_at);
-
--- Delete anything older than 30 days every day at 03:15 UTC.
-SELECT cron.schedule(
-  'logger-30-day-retention',
-  '15 3 * * *',
-  $$DELETE FROM logger_events WHERE created_at < NOW() - INTERVAL '30 days'$$
-);
-
--- Expired login sessions are cleaned at the same time.
-SELECT cron.schedule(
-  'logger-expired-sessions',
-  '20 3 * * *',
-  $$DELETE FROM logger_sessions WHERE expires_at < NOW()$$
-);

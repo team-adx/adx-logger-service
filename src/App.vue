@@ -136,7 +136,7 @@ onMounted(loadLogs)
       </div>
 
       <div v-if="error" class="error">{{ error }}</div>
-      <div class="meta">{{ filteredLogs.length }} events shown · 30-day retention</div>
+      <div class="meta">{{ filteredLogs.length }} events shown · 15-day retention</div>
 
       <div class="table-wrap">
         <table>
