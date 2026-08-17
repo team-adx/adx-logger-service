@@ -220,6 +220,7 @@ async function getLogs(req, res, session) {
         e.ip,
         e.user_agent,
         e.metadata,
+        e.path,
         e.created_at
       FROM logger_events e
       JOIN logger_projects p
@@ -242,6 +243,7 @@ async function getLogs(req, res, session) {
         e.ip,
         e.user_agent,
         e.metadata,
+        e.path,
         e.created_at
       FROM logger_events e
       JOIN logger_projects p

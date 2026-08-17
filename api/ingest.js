@@ -116,31 +116,9 @@ export default async function handler(req, res) {
         ? body.metadata
         : {}
 
-    // --------------------------------------------------
-    // 3. Get ORIGINAL client information
-    //
-    // These headers are supplied by the authenticated
-    // TKA server, not by the browser directly.
-    // --------------------------------------------------
-
-    const originalIp =
-      typeof req.headers['x-original-client-ip'] === 'string'
-        ? req.headers['x-original-client-ip'].trim()
-        : ''
-
-    const originalUserAgent =
-      typeof req.headers['x-original-user-agent'] === 'string'
-        ? req.headers['x-original-user-agent']
-        : ''
-
-    const ip = isValidIp(originalIp)
-      ? originalIp
-      : null
-
-    const userAgent = (
-      originalUserAgent ||
-      'unknown'
-    ).slice(0, 1000)
+    const ip = body.ip | null
+    const userAgent = body.userAgent | null
+    const path = body.path | null
 
     // --------------------------------------------------
     // 4. Store event
@@ -154,7 +132,8 @@ export default async function handler(req, res) {
           success,
           ip,
           user_agent,
-          metadata
+          metadata,
+          path
         )
       VALUES
         (
@@ -163,7 +142,8 @@ export default async function handler(req, res) {
           ${success},
           ${ip},
           ${userAgent},
-          ${JSON.stringify(metadata)}
+          ${JSON.stringify(metadata)},
+          ${path}
         )
     `
     return res.status(204).end()

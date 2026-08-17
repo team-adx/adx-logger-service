@@ -148,6 +148,7 @@ onMounted(loadLogs)
               <th>IP</th>
               <th>Result</th>
               <th>User-Agent</th>
+              <th>Path</th>
             </tr>
           </thead>
           <tbody>
@@ -162,6 +163,7 @@ onMounted(loadLogs)
                 <span v-else>—</span>
               </td>
               <td class="ua">{{ log.user_agent || '—' }}</td>
+              <td class="path">{{ log.path || '—' }}</td>
             </tr>
             <tr v-if="!filteredLogs.length">
               <td colspan="6" class="empty">No events found.</td>

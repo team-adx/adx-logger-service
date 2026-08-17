@@ -28,6 +28,7 @@ th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #20252c;
 th { color: #8d96a3; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
 code { color: #b9c8e8; }
 .ua { max-width: 420px; color: #8d96a3; font-size: 12px; word-break: break-word; }
+.path { max-width: 420px; color: #8d96a3; font-size: 12px; word-break: break-word; }
 .ok { color: #73d49a; font-weight: 700; }
 .bad { color: #ff8585; font-weight: 700; }
 .empty { text-align: center; padding: 40px; color: #8d96a3; }
