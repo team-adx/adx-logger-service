@@ -13,6 +13,19 @@ function sameSecret(a, b) {
   return aa.length === bb.length && crypto.timingSafeEqual(aa, bb)
 }
 
+function isValidIp(value) {
+  if (!value || typeof value !== 'string') return false
+
+  // IPv4
+  const ipv4 =
+    /^(?:\d{1,3}\.){3}\d{1,3}$/
+
+  // IPv6 - basic validation; PostgreSQL does the final validation
+  const ipv6 = value.includes(':')
+
+  return ipv4.test(value) || ipv6
+}
+
 export default async function handler(req, res) {
   // CORS / preflight must be handled before the method check.
   const origin = req.headers.origin
@@ -120,7 +133,9 @@ export default async function handler(req, res) {
         ? req.headers['x-original-user-agent']
         : ''
 
-    const ip = originalIp || 'unknown'
+    const ip = isValidIp(originalIp)
+      ? originalIp
+      : null
 
     const userAgent = (
       originalUserAgent ||
