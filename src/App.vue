@@ -49,15 +49,33 @@ async function loadLogs() {
 async function login() {
   error.value = ''
   loading.value = true
+
   try {
     const res = await fetch('/api/dashboard', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ action: 'login', username: username.value, password: password.value }),
+      body: JSON.stringify({
+        action: 'login',
+        username: username.value,
+        password: password.value,
+      }),
     })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || 'Login failed')
+
+    if (!res.ok) {
+      let message = 'Login failed'
+
+      try {
+        const data = await res.json()
+        message = data.error || message
+      } catch {
+        // Response wasn't JSON
+      }
+
+      throw new Error(message)
+    }
+
+    // Login endpoint returns 204 No Content on success.
     password.value = ''
     await loadLogs()
   } catch (e) {
