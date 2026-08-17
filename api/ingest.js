@@ -166,14 +166,6 @@ export default async function handler(req, res) {
           ${JSON.stringify(metadata)}
         )
     `
-    console.log('ingest event', {
-      project_id: project.id,
-      event,
-      success,
-      ip,
-      userAgent,
-      metadata,
-    })
     return res.status(204).end()
 
   } catch (error) {
