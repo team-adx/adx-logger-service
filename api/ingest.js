@@ -94,7 +94,6 @@ export default async function handler(req, res) {
         ? req.body
         : {}
 
-    console.log(body)
     const event =
       typeof body.event === 'string'
         ? body.event.slice(0, 100)
@@ -117,9 +116,20 @@ export default async function handler(req, res) {
         ? body.metadata
         : {}
 
-    const ip = body.ip | null
-    const userAgent = body.userAgent | null
-    const path = body.path | null
+    const ip =
+      typeof body.ip === 'string' && isValidIp(body.ip)
+        ? body.ip
+        : null
+
+    const userAgent =
+      typeof body.userAgent === 'string'
+        ? body.userAgent.slice(0, 1000)
+        : null
+
+    const path =
+      typeof body.path === 'string'
+        ? body.path.slice(0, 500)
+        : null
 
     // --------------------------------------------------
     // 4. Store event
