@@ -108,8 +108,8 @@ button:disabled {
 
 .dashboard {
   width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
 }
 
 .topbar {
@@ -200,39 +200,31 @@ code {
   white-space: nowrap;
 }
 
-/*
- * User-Agent
- *
- * Allow wrapping at sensible boundaries,
- * but NEVER one character at a time.
- */
 .ua {
-  width: 330px;
-  max-width: 330px;
-  min-width: 330px;
-
+  min-width: 300px;
   color: #8d96a3;
   font-size: 12px;
-
   white-space: normal;
   overflow-wrap: break-word;
   word-break: normal;
-
   line-height: 1.45;
 }
 
-/*
- * Metadata
- */
 .md {
-  width: 300px;
-  max-width: 300px;
-  min-width: 300px;
-
+  min-width: 250px;
   color: #8d96a3;
   font-size: 12px;
-
   white-space: normal;
+}
+
+.path {
+  min-width: 200px;
+  color: #8d96a3;
+  font-size: 12px;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  line-height: 1.45;
 }
 
 .md pre {
@@ -243,24 +235,6 @@ code {
   word-break: normal;
 
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  line-height: 1.45;
-}
-
-/*
- * Path
- */
-.path {
-  width: 260px;
-  max-width: 260px;
-  min-width: 260px;
-
-  color: #8d96a3;
-  font-size: 12px;
-
-  white-space: normal;
-  overflow-wrap: break-word;
-  word-break: normal;
-
   line-height: 1.45;
 }
 
