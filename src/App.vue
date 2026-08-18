@@ -25,6 +25,20 @@ function formatDate(value) {
   return new Date(value).toLocaleString()
 }
 
+function formatMetadata(value) {
+  if (!value) return '{}'
+
+  if (typeof value === 'string') {
+    return value
+  }
+
+  try {
+    return JSON.stringify(value, null, 2)
+  } catch {
+    return String(value)
+  }
+}
+
 async function loadLogs() {
   loading.value = true
   error.value = ''
@@ -101,43 +115,108 @@ onMounted(loadLogs)
 
 <template>
   <main class="page">
+    <!-- LOGIN -->
     <section v-if="!loggedIn" class="login-card">
       <div class="brand">Logger</div>
       <h1>Private dashboard</h1>
       <p>Authorized access only.</p>
+
       <form @submit.prevent="login">
-        <input v-model="username" autocomplete="username" placeholder="Username" />
-        <input v-model="password" autocomplete="current-password" type="password" placeholder="Password" />
-        <button :disabled="loading">{{ loading ? 'Checking…' : 'Sign in' }}</button>
+        <input
+          v-model="username"
+          autocomplete="username"
+          placeholder="Username"
+        />
+
+        <input
+          v-model="password"
+          autocomplete="current-password"
+          type="password"
+          placeholder="Password"
+        />
+
+        <button :disabled="loading">
+          {{ loading ? 'Checking…' : 'Sign in' }}
+        </button>
       </form>
-      <div v-if="error" class="error">{{ error }}</div>
+
+      <div v-if="error" class="error">
+        {{ error }}
+      </div>
     </section>
 
+    <!-- DASHBOARD -->
     <section v-else class="dashboard">
+
       <header class="topbar">
         <div>
           <div class="brand">Logger</div>
           <h1>Security events</h1>
         </div>
-        <button class="secondary" @click="logout">Sign out</button>
+
+        <button
+          class="secondary signout"
+          @click="logout"
+        >
+          Sign out
+        </button>
       </header>
 
+      <!-- FILTERS -->
       <div class="filters">
+
         <select v-model="selectedProject">
-          <option value="all">All projects</option>
-          <option v-for="project in projects" :key="project" :value="project">{{ project }}</option>
+          <option value="all">
+            All projects
+          </option>
+
+          <option
+            v-for="project in projects"
+            :key="project.id"
+            :value="project.name"
+          >
+            {{ project.name }}
+          </option>
         </select>
+
         <select v-model="selectedEvent">
-          <option value="all">All events</option>
-          <option v-for="event in eventTypes" :key="event" :value="event">{{ event }}</option>
+          <option value="all">
+            All events
+          </option>
+
+          <option
+            v-for="event in eventTypes"
+            :key="event"
+            :value="event"
+          >
+            {{ event }}
+          </option>
         </select>
-        <input v-model="ipSearch" placeholder="Filter IP…" />
-        <button class="secondary" @click="loadLogs">Refresh</button>
+
+        <input
+          v-model="ipSearch"
+          placeholder="Filter IP…"
+        />
+
+        <button
+          class="secondary refresh"
+          @click="loadLogs"
+        >
+          Refresh
+        </button>
+
       </div>
 
-      <div v-if="error" class="error">{{ error }}</div>
-      <div class="meta">{{ filteredLogs.length }} events shown · 15-day retention</div>
+      <div v-if="error" class="error">
+        {{ error }}
+      </div>
 
+      <div class="meta">
+        {{ filteredLogs.length }} events shown ·
+        7-day retention
+      </div>
+
+      <!-- TABLE -->
       <div class="table-wrap">
         <table>
           <thead>
@@ -152,27 +231,74 @@ onMounted(loadLogs)
               <th>Path</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr v-for="log in filteredLogs" :key="log.id">
-              <td>{{ formatDate(log.created_at) }}</td>
-              <td>{{ log.project }}</td>
-              <td><code>{{ log.event }}</code></td>
-              <td><code>{{ log.ip || 'unknown' }}</code></td>
-              <td>
-                <span v-if="log.success === true" class="ok">SUCCESS</span>
-                <span v-else-if="log.success === false" class="bad">FAILED</span>
-                <span v-else>—</span>
+
+            <tr
+              v-for="log in filteredLogs"
+              :key="log.id"
+            >
+              <td class="time">
+                {{ formatDate(log.created_at) }}
               </td>
-              <td class="ua">{{ log.user_agent || '—' }}</td>
-              <td class="md">{{ log.metadata || '{}' }}</td>
-              <td class="path">{{ log.path || '—' }}</td>
+
+              <td class="project">
+                {{ log.project }}
+              </td>
+
+              <td>
+                <code>{{ log.event }}</code>
+              </td>
+
+              <td>
+                <code class="ip">
+                  {{ log.ip || 'unknown' }}
+                </code>
+              </td>
+
+              <td class="result">
+                <span
+                  v-if="log.success === true"
+                  class="ok"
+                >
+                  SUCCESS
+                </span>
+
+                <span
+                  v-else-if="log.success === false"
+                  class="bad"
+                >
+                  FAILED
+                </span>
+
+                <span v-else>
+                  —
+                </span>
+              </td>
+
+              <td class="ua">
+                {{ log.user_agent || '—' }}
+              </td>
+
+              <td class="md">
+                <pre>{{ formatMetadata(log.metadata) }}</pre>
+              </td>
+
+              <td class="path">
+                {{ log.path || '—' }}
+              </td>
             </tr>
+
             <tr v-if="!filteredLogs.length">
-              <td colspan="6" class="empty">No events found.</td>
+              <td colspan="8" class="empty">
+                No events found.
+              </td>
             </tr>
+
           </tbody>
         </table>
       </div>
+
     </section>
   </main>
 </template>

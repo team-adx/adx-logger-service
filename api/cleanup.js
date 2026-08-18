@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   try {
     const deletedEvents = await sql`
       DELETE FROM logger_events
-      WHERE created_at < NOW() - INTERVAL '15 days'
+      WHERE created_at < NOW() - INTERVAL '7 days'
     `
 
     const deletedSessions = await sql`
